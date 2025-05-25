@@ -29,18 +29,31 @@
 #     <pellegrinoprevete@gmail.com>
 #     <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
 
-# Maintainer: Pellegrino Prevete <pellegrinoprevete@gmail.com>
-
-_ns="tallero"
+_evmfs_available="$( \
+  command \
+    -v \
+    "evmfs" || \
+    true)"
+if [[ ! -v "_evmfs" ]]; then
+  if [[ "${_evmfs_available}" != "" ]]; then
+    _evmfs="true"
+  elif [[ "${_evmfs_available}" == "" ]]; then
+    _evmfs="false"
+  fi
+fi
+_ns="themartiancompany"
 _Pkg="DialAPirate"
 _app_id="com.github.${_ns}.${_Pkg}"
 _pkg=dial-a-pirate
 pkgname="${_pkg}"
-pkgver=0.0.1
+pkgver=0.0.1.1
 pkgrel=3
 _pkgdesc=(
-  "A LÖVE implementation of Dial-A-Pirate "
-  "from the EGA version of The Secret of Monkey Island")
+  "A LÖVE implementation"
+  "of Dial-A-Pirate from the"
+  "EGA version of"
+  "'The Secret of Monkey Island'."
+)
 pkgdesc="${_pkgdesc[*]}"
 arch=(
   'aarch64'
@@ -53,7 +66,6 @@ arch=(
   'x86_64'
 )
 _http="https://github.com"
-_ns="tallero"
 url="${_http}/${_ns}/${_pkg}"
 license=(
   'AGPL3'
@@ -67,29 +79,93 @@ makedepends=(
 options=(
   "!strip"
 )
+_tag="${pkgver}"
+_tag_name="tag"
 _url="${url}"
-_tarname="${_pkg}-${pkgver}"
-_http_uri="${_url}/archive/refs/tags/${pkgver}.tar.gz"
+_tarname="${pkgname}-${_tag}"
+_http_uri="${_url}/archive/refs/tags/${_tag}.tar.gz"
 _http_src="${_tarname}.tar.gz::${_http_uri}"
-source=(
-  "${_http_src}"
+# Assets
+_back_sum="3fbf95f9a9818b894a11128a1ffb2aaac35ea1d7ce90c870ef586c852c9d1321"
+_front_sum="6dae8a6d1bdf97bdcb69b172f67663f78572acdae0123690a0ec5a98b100aa16"
+_back_sig_sum="a1f8301c8dd2749adbbe0727a49110093ce1653c5f9f6c60523e5947f5ff2499"
+_front_sig_sum="ec1f2fc07428b21cf4f6c6f5162bb39d8498c2a8ae7e3f292a3136ed2e95015d"
+_evmfs_network="17000"
+_evmfs_address="0x151920938488F193735e83e052368cD41F9d9362"
+# Kid
+_evmfs_ns="0x926acb6aA4790ff678848A9F1C59E578B148C786"
+_archive_sum="195906f488c0b5b46458b4a723b61581933aea296ebea6b89c28834e34c642b7"
+_pic_sum="343264e33545e96be98c552e9f8d3885de75144c08e38a26b38bef7258b4a4de"
+_evmfs_archive_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_archive_sum}"
+_evmfs_pic_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_pic_sum}"
+_asset_back_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_back_sum}"
+_asset_front_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_front_sum}"
+_evmfs_archive_src="${_tarname}.tar.gz::${_evmfs_archive_uri}"
+_evmfs_pic_src="${_app_id}.png::${_evmfs_pic_uri}"
+_asset_back_src="back.png::${_asset_back_uri}"
+_asset_front_src="front.png::${_asset_front_uri}"
+_evmfs_sig_network="100"
+_evmfs_sig_address="0x69470b18f8b8b5f92b48f6199dcb147b4be96571"
+# Dvorak
+_evmfs_sig_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
+_archive_sig_sum="1ee022c31f73440d31407a95000ec53d891dbde52fd57c1eb051bf0b3bd3f047"
+_pic_sig_sum="7144458a58d272f0aa7c973dbb74a5ba764870e10c3cb56e5f18cf8b48c65bca"
+_archive_sig_uri="evmfs://${_evmfs_sig_network}/${_evmfs_sig_address}/${_evmfs_sig_ns}/${_archive_sig_sum}"
+_back_sig_uri="evmfs://${_evmfs_sig_network}/${_evmfs_sig_address}/${_evmfs_sig_ns}/${_back_sig_sum}"
+_front_sig_uri="evmfs://${_evmfs_sig_network}/${_evmfs_sig_address}/${_evmfs_sig_ns}/${_front_sig_sum}"
+_pic_sig_uri="evmfs://${_evmfs_sig_network}/${_evmfs_sig_address}/${_evmfs_sig_ns}/${_pic_sig_sum}"
+_archive_sig_src="${_tarname}.tar.gz.sig::${_archive_sig_uri}"
+_back_sig_src="back.png.sig::${_back_sig_uri}"
+_front_sig_src="front.png.sig::${_front_sig_uri}"
+source+=(
   "${pkgname}.sh"
   "${_app_id}.desktop"
-  "${_app_id}.png"
 )
-sha512sums=(
-  "5186dfc8fc400ac911766bfb62e471321221f2faf50ae843261bb1261215aebfeb09003e4b1f0ea4c0be7cf521f162e7c6687a74a14f1c90dbbdc80db0489b68"
-  "18ed8c35ae97402b0b5b10630f7e9a477015200a6447fd6a45cab7e580d781381beb2b1c6bb8e2c893ddb6b0142ecec58b24831e75a0501f8ab3e3f5132b6e45"
-  "3aba506f26279f439d37a1105e3ac10ea63d69a5c184f9a41bff425421bd4a9a65a7c17952f17369fe9b908ea5924fdeaf5dbf6eef2be285d96b49d03d991be2"
-  "b1c111f49ef594e06a3882a517a4cdc7314b5a8472989d694099e0313b0041643071ce5c461bba23c5837cc57aaeec6e641e5df4aabb69eb03b667a7a060d8cf"
+sha256sums=(
+  "b8310e20a7e00c30b1283e45e1062911232e14ab2af74b91c5171c486771da4d"
+  "da653d27c4463db23f5807c5c3d9ae0f4f90d633c0244a569d2e6a547d084495"
+)
+if [[ "${_evmfs}" == "true" ]]; then
+  makedepends+=(
+    "evmfs"
+  )
+  _src="${_evmfs_archive_src}"
+  source+=(
+    "${_evmfs_pic_src}"
+    "${_pic_sig_src}"
+    "${_archive_sig_src}"
+    "${_asset_back_src}"
+    "${_asset_front_src}"
+    "${_back_sig_src}"
+    "${_front_sig_src}"
+  )
+  sha256sums+=(
+    "${_pic_sum}"
+    "${_pic_sig_sum}"
+    "${_archive_sig_sum}"
+    "${_back_sum}"
+    "${_front_sum}"
+    "${_back_sig_sum}"
+    "${_front_sig_sum}"
+  )
+elif [[ "${_evmfs}" == "false" ]]; then
+  _src="${_http_src}"
+fi
+source+=(
+  "${_src}"
+)
+sha256sums+=(
+  "${_archive_sum}"
 )
 
 build() {
+  if [[ "${_evmfs}" == "false" ]]; then
+    cd \
+      "${srcdir}/${_tarname}/assets"
+    "./download-assets.sh"
+  fi
   cd \
-    "${srcdir}/${_tarname}/assets"
-  "./download-assets.sh"
-  cd \
-    ".."
+    "${srcdir}/${_tarname}"
   "./build.sh"
 }
 
