@@ -123,7 +123,7 @@ source+=(
 )
 sha256sums=(
   "b8310e20a7e00c30b1283e45e1062911232e14ab2af74b91c5171c486771da4d"
-  "da653d27c4463db23f5807c5c3d9ae0f4f90d633c0244a569d2e6a547d084495"
+  "a1f8301c8dd2749adbbe0727a49110093ce1653c5f9f6c60523e5947f5ff2499"
 )
 if [[ "${_evmfs}" == "true" ]]; then
   makedepends+=(
@@ -189,3 +189,4 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
+da653d27c4463db23f5807c5c3d9ae0f4f90d633c0244a569d2e6a547d084495  dial-a-pirate.sh
