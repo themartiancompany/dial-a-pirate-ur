@@ -115,6 +115,7 @@ _back_sig_uri="evmfs://${_evmfs_sig_network}/${_evmfs_sig_address}/${_evmfs_sig_
 _front_sig_uri="evmfs://${_evmfs_sig_network}/${_evmfs_sig_address}/${_evmfs_sig_ns}/${_front_sig_sum}"
 _pic_sig_uri="evmfs://${_evmfs_sig_network}/${_evmfs_sig_address}/${_evmfs_sig_ns}/${_pic_sig_sum}"
 _archive_sig_src="${_tarname}.tar.gz.sig::${_archive_sig_uri}"
+_pic_sig_src="${_app_id}.png.sig::${_pic_sig_uri}"
 _back_sig_src="back.png.sig::${_back_sig_uri}"
 _front_sig_src="front.png.sig::${_front_sig_uri}"
 source=(
@@ -123,7 +124,7 @@ source=(
 )
 sha256sums=(
   "1d2d8f7fe730997a7b870fd14aaae14759e649b4a3699eacc3873877d5b3e593"
-  "a1f8301c8dd2749adbbe0727a49110093ce1653c5f9f6c60523e5947f5ff2499"
+  "b8310e20a7e00c30b1283e45e1062911232e14ab2af74b91c5171c486771da4d"
 )
 if [[ "${_evmfs}" == "true" ]]; then
   makedepends+=(
@@ -159,14 +160,20 @@ sha256sums+=(
 )
 
 build() {
-  if [[ "${_evmfs}" == "false" ]]; then
+  if [[ "${_evmfs}" == "true" ]]; then
+    cp \
+      "${srcdir}/"{"back.png","front.png"} \
+      "${srcdir}/${_tarname}/assets"
+  elif [[ "${_evmfs}" == "false" ]]; then
     cd \
       "${srcdir}/${_tarname}/assets"
-    "./download-assets.sh"
+    bash \
+      "./download-assets.sh"
   fi
   cd \
     "${srcdir}/${_tarname}"
-  "./build.sh"
+  bash \
+    "./build.sh"
 }
 
 package() {
