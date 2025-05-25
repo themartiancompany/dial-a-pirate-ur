@@ -117,12 +117,12 @@ _pic_sig_uri="evmfs://${_evmfs_sig_network}/${_evmfs_sig_address}/${_evmfs_sig_n
 _archive_sig_src="${_tarname}.tar.gz.sig::${_archive_sig_uri}"
 _back_sig_src="back.png.sig::${_back_sig_uri}"
 _front_sig_src="front.png.sig::${_front_sig_uri}"
-source+=(
+source=(
   "${pkgname}.sh"
   "${_app_id}.desktop"
 )
 sha256sums=(
-  "b8310e20a7e00c30b1283e45e1062911232e14ab2af74b91c5171c486771da4d"
+  "1d2d8f7fe730997a7b870fd14aaae14759e649b4a3699eacc3873877d5b3e593"
   "a1f8301c8dd2749adbbe0727a49110093ce1653c5f9f6c60523e5947f5ff2499"
 )
 if [[ "${_evmfs}" == "true" ]]; then
@@ -189,4 +189,3 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
-da653d27c4463db23f5807c5c3d9ae0f4f90d633c0244a569d2e6a547d084495  dial-a-pirate.sh
