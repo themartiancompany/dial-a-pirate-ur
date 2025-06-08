@@ -33,16 +33,45 @@ _global_variables() {
 
 _requirements() {
   local \
-    _love
-  _love="$( \
-    command \
-      -v \
-      "love")"
-  if [[ "${_love}" == "" ]]; then
-    echo \
-      "[${app_name}] ERROR: You need to install Love."
-    exit \
-      1
+    _love \
+    _msg=() \
+    _os \
+    _termux_open
+  _os="$( \
+    uname \
+      -o)"
+  if [[ "${_os}" == "GNU/Linux" ]]; then
+    _love="$( \
+      command \
+        -v \
+        "love")"
+    if [[ "${_love}" == "" ]]; then
+      _msg=(
+        "[${app_name}]"
+	  "ERROR:"
+            "You need to install Love."
+      )
+      echo \
+        "${_msg[*]}"
+      exit \
+        1
+    fi
+  elif [[ "${_os}" == "Android" ]]; then
+    _termux_open="$( \
+      command \
+        -v \
+	"termux-open")"
+    if [[ "${_termux_open}" == "" ]]; then
+      _msg=(
+        "[${app_name}]"
+	  "ERROR:"
+	    "You need termux-open to run dial-a-pirate."
+      )
+      echo \
+        "${_msg[*]}"
+      exit \
+        1
+    fi
   fi
 }
 
@@ -63,9 +92,15 @@ _set_overrides() {
 
 _dial_a_pirate() {
   local \
-    _game_path="${1}"  
-  love \
-    "${_game_path}"
+    _game_path="${1}" \
+    _os
+  _os="$( \
+    uname \
+      -o)"
+  if [[ "${_os}" == "GNU/Linux" ]]; then
+    love \
+      "${_game_path}"
+  fi
 }
 
 _globals
