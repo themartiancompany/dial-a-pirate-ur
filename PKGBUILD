@@ -177,6 +177,39 @@ build() {
 }
 
 package() {
+  local \
+    _game_dir \
+    _rom_dir \
+    _rom_install_dir \
+    _pic_filename \
+    _msg=()
+  _game_dir="/usr/games/${_app_id}"
+  install \
+    -vdm755 \
+    "${pkgdir}${_game_dir}"
+  if [[ "${_os}" == "GNU/Linux" ]]; then
+    _rom_dir="${_game_dir}"
+    _rom_install_dir="${pkgdir}${_rom_dir}"
+  elif [[ "${_os}" == "Android" ]]; then
+    _rom_dir="/storage/emulated/0/Android/media/${_app_id}"
+    _rom_install_dir="$( \
+      _pkgdir_get \
+        "${pkgdir}")${_rom_dir}"
+    ln \
+      -s \
+      "${_rom_dir}/${_uuid}.bin" \
+      "${pkgdir}${_game_dir}/${_uuid}.bin"
+    ln \
+      -s \
+      "${_rom_dir}/${_uuid}.cue" \
+      "${pkgdir}${_game_dir}/${_uuid}.cue"
+  fi
+  _game="${pkgdir}/usr/games/${_app_id}"
+  install \
+    -vDm644 \
+    "${_rom_bin}" \
+    "${srcdir}/${_tarname}/${_pkg}.love" \
+    "${_rom_install_dir}/${_pkg}.love"
   install \
     -vDm755 \
     "${_app_id}.desktop" \
@@ -189,10 +222,6 @@ package() {
     -vDm0755 \
     "${_pkg}.sh" \
     "${pkgdir}/usr/bin/${_pkg}"
-  install \
-    -vDm0644 \
-    "${srcdir}/${_tarname}/${_pkg}.love" \
-    "${pkgdir}/usr/share/${_pkg}/${_pkg}.love"
 }
 
 # vim:set ts=2 sw=2 et:
