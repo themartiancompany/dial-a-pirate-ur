@@ -75,6 +75,7 @@ depends=(
 )
 makedepends=(
   'wget'
+  'zip'
 )
 options=(
   "!strip"
