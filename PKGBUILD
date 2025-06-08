@@ -208,7 +208,6 @@ package() {
   _game="${pkgdir}/usr/games/${_app_id}"
   install \
     -vDm644 \
-    "${_rom_bin}" \
     "${srcdir}/${_tarname}/${_pkg}.love" \
     "${_rom_install_dir}/${_pkg}.love"
   install \
