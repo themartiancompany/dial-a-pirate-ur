@@ -180,6 +180,13 @@ build() {
     "./build.sh"
 }
 
+_pkgdir_get() {
+  local \
+    _pkgdir="${1}"
+  realpath \
+    "${_pkgdir}/../../../.."
+}
+
 package() {
   local \
     _game_dir \
